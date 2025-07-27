@@ -62,7 +62,7 @@ public class OauthLoginSuccessHandler implements AuthenticationSuccessHandler {
             oauthTokensService.createOauthTokens(model);
         }
 
-        response.sendRedirect("http://localhost:5173/oauth2/callback?token=" + jwtToken);
+        response.sendRedirect("http://localhost:8080/oauth2/callback?token=" + jwtToken);
     }
 }
 

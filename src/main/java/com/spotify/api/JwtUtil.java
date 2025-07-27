@@ -13,7 +13,6 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    //private static final SecretKey secretKey = Keys.hmacShaKeyFor(System.getenv("JWT_SECRET").getBytes());
     private static final int expirationMs = 360000000;
     static SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 

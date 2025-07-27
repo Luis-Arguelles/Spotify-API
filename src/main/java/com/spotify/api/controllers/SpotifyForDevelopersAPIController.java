@@ -46,16 +46,6 @@ public class SpotifyForDevelopersAPIController {
         return new ResponseEntity<>(artist, HttpStatus.OK);
     }
 
-    @GetMapping("/artists/{id}/relatedArtists")
-    public ResponseEntity<RelatedArtistsDTO> getRelatedArtists(Authentication authentication, @PathVariable String id) {
-
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient("spotify", authentication.getName());
-
-        String accessToken = client.getAccessToken().getTokenValue();
-        RelatedArtistsDTO artist = spotifyForDevelopersAPIService.getRelatedArtists(accessToken);
-        return new ResponseEntity<>(artist, HttpStatus.OK);
-    }
-
     @GetMapping("artists/{artistId}/top-tracks")
     public ResponseEntity<ArtistPopularTracksDTO> getArtistPopularTracks(Authentication authentication, @PathVariable String artistId) {
         try {
@@ -63,16 +53,6 @@ public class SpotifyForDevelopersAPIController {
 
             String accessToken = client.getAccessToken().getTokenValue();
             ArtistPopularTracksDTO artistTopTracks = spotifyForDevelopersAPIService.getArtistPopularTracks(accessToken, artistId);
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println("----------------------------------------");
-            System.out.println("Artist top tracks:");
-            System.out.println(artistTopTracks.getTracks().stream().map(track -> track.getName()));
-            System.out.println("----------------------------------------");
-            System.out.println();
-            System.out.println();
-            System.out.println();
 
             return new ResponseEntity<>(artistTopTracks, HttpStatus.OK);
         } catch (Exception ex) {
