@@ -66,7 +66,6 @@ public class OauthTokensService {
             throw new RuntimeException("No refresh token available.");
         }
 
-        // Call Spotify to refresh the access token
         String credentials = clientId + ":" + clientSecret;
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
