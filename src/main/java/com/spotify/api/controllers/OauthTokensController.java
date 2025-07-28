@@ -33,7 +33,6 @@ public class OauthTokensController {
 
     @PostMapping("/createTokens")
     public ResponseEntity<OauthTokensModel> createOauthTokens(Authentication authentication) {
-        // Load client by registration ID (same one used in application.properties)
         OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
                 "spotify", authentication.getName());
 

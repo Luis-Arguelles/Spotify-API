@@ -60,7 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             } catch (JwtException e) {
                 System.out.println("Invalid JWT: " + e.getMessage());
-                // Optional: send 401 response
             }
         }
 

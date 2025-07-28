@@ -32,26 +32,7 @@ public class RestClientConfig {
 
                     ClientHttpResponse response = execution.execute(request, body);
 
-                    System.out.println();
-                    System.out.println();
-                    System.out.println();
-                    System.out.println("----------------------------------");
-                    System.out.println("Status code:" + response.getStatusCode());
-                    System.out.println("----------------------------------");
-                    System.out.println();
-                    System.out.println();
-
                     if (response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                        // Token is probably expired
-                        System.out.println();
-                        System.out.println();
-                        System.out.println();
-                        System.out.println("----------------------------------");
-                        System.out.println("Token expired. Refreshing...");
-                        System.out.println("----------------------------------");
-                        System.out.println();
-                        System.out.println();
-                        System.out.println();
 
                         String newAccessToken = oauthTokensService.refreshAccessTokenWithSpotify(); // Refresh + update DB
 

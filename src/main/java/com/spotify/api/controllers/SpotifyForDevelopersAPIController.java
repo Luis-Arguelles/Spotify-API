@@ -2,6 +2,7 @@ package com.spotify.api.controllers;
 
 import com.spotify.api.CustomException;
 import com.spotify.api.DTOs.*;
+import com.spotify.api.DTOs.SearchResponseDTOs.SearchResponseDTO;
 import com.spotify.api.services.SpotifyForDevelopersAPIService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class SpotifyForDevelopersAPIController {
 
     private final SpotifyForDevelopersAPIService spotifyForDevelopersAPIService;
@@ -44,16 +46,6 @@ public class SpotifyForDevelopersAPIController {
         return new ResponseEntity<>(artist, HttpStatus.OK);
     }
 
-    @GetMapping("/artists/{id}/relatedArtists")
-    public ResponseEntity<RelatedArtistsDTO> getRelatedArtists(Authentication authentication, @PathVariable String id) {
-
-        OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient("spotify", authentication.getName());
-
-        String accessToken = client.getAccessToken().getTokenValue();
-        RelatedArtistsDTO artist = spotifyForDevelopersAPIService.getRelatedArtists(accessToken);
-        return new ResponseEntity<>(artist, HttpStatus.OK);
-    }
-
     @GetMapping("artists/{artistId}/top-tracks")
     public ResponseEntity<ArtistPopularTracksDTO> getArtistPopularTracks(Authentication authentication, @PathVariable String artistId) {
         try {
@@ -61,26 +53,15 @@ public class SpotifyForDevelopersAPIController {
 
             String accessToken = client.getAccessToken().getTokenValue();
             ArtistPopularTracksDTO artistTopTracks = spotifyForDevelopersAPIService.getArtistPopularTracks(accessToken, artistId);
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println("----------------------------------------");
-            System.out.println("Artist top tracks:");
-            System.out.println(artistTopTracks.getTracks().stream().map(track -> track.getName()));
-            System.out.println("----------------------------------------");
-            System.out.println();
-            System.out.println();
-            System.out.println();
 
             return new ResponseEntity<>(artistTopTracks, HttpStatus.OK);
         } catch (Exception ex) {
             throw new CustomException(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @GetMapping("/artists/{artistId}/albums")
-    public ResponseEntity<ArtistAlbumsResponseDTO> getArtistAlbums(Authentication authentication, @PathVariable String artistId, @RequestParam(defaultValue = "9") String limit) {
+    public ResponseEntity<ArtistAlbumsResponseDTO> getArtistAlbums(Authentication authentication, @PathVariable String artistId, @RequestParam(defaultValue = "10") String limit) {
         try {
             OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient("spotify", authentication.getName());
             String accessToken = client.getAccessToken().getTokenValue();
@@ -91,7 +72,7 @@ public class SpotifyForDevelopersAPIController {
         }
 
     }
-
+    
     @GetMapping("/albums/{id}")
     public ResponseEntity<AlbumDTO> getAlbum(Authentication authentication, @PathVariable String id) {
 
@@ -113,16 +94,16 @@ public class SpotifyForDevelopersAPIController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> searchItems(
+    public ResponseEntity<SearchResponseDTO> searchItems(
             Authentication authentication,
             @RequestParam String q,
-            @RequestParam List<String> type) {
+            @RequestParam String type) {
         OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient("spotify", authentication.getName());
 
         String accessToken = client.getAccessToken().getTokenValue();
         ItemsSearchRequestDTO searchRequest = new ItemsSearchRequestDTO(q, type);
 
-        Object searchResults = spotifyForDevelopersAPIService.searchItem(accessToken, searchRequest);
+        SearchResponseDTO searchResults = spotifyForDevelopersAPIService.searchItem(accessToken, searchRequest);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 
